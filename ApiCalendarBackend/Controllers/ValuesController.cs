@@ -21,31 +21,64 @@ using Newtonsoft.Json;
 
 namespace ApiCalendarBackend.Controllers
 {
-    public class JsonTextWriterEx : JsonTextWriter
-    {
-        public string NewLine { get; set; }
-
-        public JsonTextWriterEx(TextWriter textWriter) : base(textWriter)
-        {
-            NewLine = Environment.NewLine;
-        }
-
-        protected override void WriteIndent()
-        {
-            if (Formatting == Formatting.Indented)
-            {
-                WriteWhitespace(NewLine);
-                int currentIndentCount = Top * Indentation;
-                for (int i = 0; i < currentIndentCount; i++)
-                    WriteIndentSpace();
-            }
-        }
-    }
 
     public class ValuesController : ApiController
     {
         static string[] Scopes = { CalendarService.Scope.CalendarReadonly };
         static string ApplicationName = "Google Calendar API .NET Quickstart";
+
+        string countdown(string fechaevento)
+        {
+
+
+         
+            var hoy = new DateTime();
+            hoy = DateTime.Now;
+
+            double dias = 0;
+            double horas = 0;
+            double minutos = 0;
+            double segundos = 0;
+            
+            var date1 = new DateTime();
+            date1 = DateTime.ParseExact("2018-10-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+            double diferencia = (date1 - hoy).TotalDays / 1000;
+            dias = Math.Floor(diferencia / 86400);
+            diferencia = diferencia - (86400 * dias);
+            horas = Math.Floor(diferencia / 3600);
+            diferencia = diferencia - (3600 * horas);
+            minutos = Math.Floor(diferencia / 60);
+            diferencia = diferencia - (60 * minutos);
+            segundos = Math.Floor(diferencia);
+
+
+
+          //  console.log(hoy + "-" + fechaevento);
+            var fechat = "";
+
+
+            if (segundos > 0)
+                fechat = "Quedan " + segundos + " segundos :";
+            if (minutos > 0)
+                fechat = "Quedan " + minutos + " minutos :";
+            if (horas > 0)
+            {
+                if (date1.Hour > 12)
+                    fechat = "Hoy a las " + date1.Hour + " PM :";
+                else
+                    fechat = "Hoy a las " + date1.Hour + " AM :";
+            }
+            if (dias > 0)
+                fechat = "En " + dias + " Dias :";
+
+            return fechat;
+
+
+        }
+
+
 
         List<string> megafunction()
         {
@@ -90,12 +123,15 @@ namespace ApiCalendarBackend.Controllers
                 foreach (var eventItem in events.Items)
                 {
                     string when = eventItem.Start.DateTime.ToString();
+                    string whenconv = "";
                     if (String.IsNullOrEmpty(when))
                     {
-                        when = eventItem.Start.Date;
+                        //  when = eventItem.Start.Date;
+                        whenconv = countdown(when);
+
                     }
                     //        Console.WriteLine("{0} ({1})", eventItem.Summary, when);
-                    megaCadena.Add(eventItem.Summary + " " + when);
+                    megaCadena.Add(eventItem.Summary + " " + whenconv);
 
                 }
 
