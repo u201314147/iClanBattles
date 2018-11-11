@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Google.Apis.Auth.OAuth2;
+﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json;
+using System.Web.Http;
 
 namespace ApiCalendarBackend.Controllers
 {
@@ -126,12 +119,12 @@ namespace ApiCalendarBackend.Controllers
                     string whenconv = "";
                     if (String.IsNullOrEmpty(when))
                     {
-                        //  when = eventItem.Start.Date;
-                        whenconv = countdown(when);
+                         when = eventItem.Start.Date;
+                       // whenconv = countdown(when);
 
                     }
                     //        Console.WriteLine("{0} ({1})", eventItem.Summary, when);
-                    megaCadena.Add(eventItem.Summary + " " + whenconv);
+                    megaCadena.Add(eventItem.Summary + " " + when);
 
                 }
 
@@ -150,16 +143,32 @@ namespace ApiCalendarBackend.Controllers
       //      Console.Read();
             return megaCadena;
         }
-        // GET api/values
-        public IEnumerable<string> Get()
+
+
+        public class RootObject
         {
-            return megafunction();
+            public List<String> events { get; set; }
+        }
+        // GET api/values
+        public string Get()
+        {
+         
+        
+           RootObject obj = new RootObject();
+            List<String> events = new List<String>();
+            
+
+            obj.events = megafunction();
+            String megaCadena = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+          //  RootObject objf = JsonConvert.DeserializeObject<RootObject>(megaCadena);
+
+            return megaCadena;
         }
 
         // GET api/values/5
         public string Get(int id)
         {
-           
+            
 
             return megafunction().ElementAt(id); 
         }
