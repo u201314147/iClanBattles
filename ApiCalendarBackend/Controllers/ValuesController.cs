@@ -150,19 +150,22 @@ namespace ApiCalendarBackend.Controllers
             public List<String> events { get; set; }
         }
         // GET api/values
-        public string Get()
+        public RootObject Get()
         {
-         
-        
-           RootObject obj = new RootObject();
-            List<String> events = new List<String>();
+
+
+              RootObject obj = new RootObject();
+             List<String> events = new List<String>();
+
+
+             obj.events = megafunction();
+         //      String megaCadena = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+           //   RootObject objf = JsonConvert.DeserializeObject<RootObject>(megaCadena);
             
-
-            obj.events = megafunction();
-            String megaCadena = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-          //  RootObject objf = JsonConvert.DeserializeObject<RootObject>(megaCadena);
-
-            return megaCadena;
+           //String megaCadena = Newtonsoft.Json.JsonConvert.SerializeObject(megafunction());
+           
+          
+            return obj; 
         }
 
         // GET api/values/5
