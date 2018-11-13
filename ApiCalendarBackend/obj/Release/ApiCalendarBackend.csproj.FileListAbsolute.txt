@@ -120,3 +120,7 @@ C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\obj\Release\Api
 C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\obj\Release\ApiCalendarBackend.csproj.CopyComplete
 C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\obj\Release\ApiCalendarBackend.dll
 C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\obj\Release\ApiCalendarBackend.pdb
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\System.Web.Cors.dll
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\System.Web.Http.Cors.dll
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\System.Web.Http.Cors.xml
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\obj\Release\ApiCalendarBackend.csprojAssemblyReference.cache

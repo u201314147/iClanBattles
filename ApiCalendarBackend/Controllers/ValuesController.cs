@@ -11,10 +11,14 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
-
+using System.Web.Http.Cors;
 namespace ApiCalendarBackend.Controllers
 {
-
+    public class TestController : ApiController
+    {
+        // Controller methods not shown...
+    }
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ValuesController : ApiController
     {
         static string[] Scopes = { CalendarService.Scope.CalendarReadonly };
@@ -73,9 +77,9 @@ namespace ApiCalendarBackend.Controllers
 
 
 
-        List<string> megafunction()
+        List<Event> megafunction()
         {
-            List<string> megaCadena = new List<string>();
+            List<Event> megaCadena = new List<Event>();
             UserCredential credential;
 
             using (var stream =
@@ -124,7 +128,10 @@ namespace ApiCalendarBackend.Controllers
 
                     }
                     //        Console.WriteLine("{0} ({1})", eventItem.Summary, when);
-                    megaCadena.Add(eventItem.Summary + " " + when);
+                    Event even = new Event();
+                    even.date = when;
+                    even.desc = eventItem.Summary;
+                    megaCadena.Add(even);
 
                 }
 
@@ -137,17 +144,24 @@ namespace ApiCalendarBackend.Controllers
             }
             else
             {
-                megaCadena.Add("no hay eventos");
+                Event even = new Event();
+                even.date = "";
+                even.desc = "no hay eventos";
+                megaCadena.Add(even);
            //     Console.WriteLine("No upcoming events found.");
             }
       //      Console.Read();
             return megaCadena;
         }
 
-
+        public class Event
+        {
+            public String desc { get; set; }
+            public String date { get; set; }
+        }
         public class RootObject
         {
-            public List<String> events { get; set; }
+            public List<Event> events { get; set; }
         }
         // GET api/values
         public RootObject Get()
@@ -155,7 +169,7 @@ namespace ApiCalendarBackend.Controllers
 
 
               RootObject obj = new RootObject();
-             List<String> events = new List<String>();
+             List<Event> events = new List<Event>();
 
 
              obj.events = megafunction();
@@ -169,7 +183,7 @@ namespace ApiCalendarBackend.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public Event Get(int id)
         {
             
 
