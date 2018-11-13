@@ -6,6 +6,7 @@ using Google.Apis.Util.Store;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -79,6 +80,16 @@ namespace ApiCalendarBackend.Controllers
 
         List<Event> megafunction()
         {
+            CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "yyyy'-'MM'-'dd";
+
+            ci.DateTimeFormat.LongTimePattern = "hh':'mm";
+
+            Thread.CurrentThread.CurrentCulture = ci;
+
+            Thread.CurrentThread.CurrentUICulture = ci;
+
+            
             List<Event> megaCadena = new List<Event>();
             UserCredential credential;
 
@@ -114,17 +125,23 @@ namespace ApiCalendarBackend.Controllers
 
             // List events.
             Events events = request.Execute();
+
+
             //  Console.WriteLine("Upcoming events:");
             if (events.Items != null && events.Items.Count > 0)
             {
                 foreach (var eventItem in events.Items)
                 {
+                    
+                  
+                    var dt = DateTime.Now;
+                    string s = dt.ToString();
+
                     string when = eventItem.Start.DateTime.ToString();
-                    string whenconv = "";
                     if (String.IsNullOrEmpty(when))
                     {
                          when = eventItem.Start.Date;
-                       // whenconv = countdown(when);
+                      
 
                     }
                     //        Console.WriteLine("{0} ({1})", eventItem.Summary, when);
