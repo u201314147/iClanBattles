@@ -124,3 +124,6 @@ C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\System.Web.
 C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\System.Web.Http.Cors.dll
 C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\System.Web.Http.Cors.xml
 C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\obj\Release\ApiCalendarBackend.csprojAssemblyReference.cache
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\Google.Apis.Gmail.v1.dll
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\Google.Apis.Gmail.v1.pdb
+C:\Users\Acer\source\repos\ApiCalendarBackend\ApiCalendarBackend\bin\Google.Apis.Gmail.v1.xml

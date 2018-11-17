@@ -252,6 +252,9 @@
     </Content>
     <Content Include="credentials.json" />
     <Content Include="credentials2.json" />
+    <None Include="Properties\PublishProfiles\Api-Mirror - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\Api-Mirror - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\mirrorapi - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mirrorapi - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />

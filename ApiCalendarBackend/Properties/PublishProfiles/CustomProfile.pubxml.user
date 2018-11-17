@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Este archivo se usa en el proceso de publicación y empaquetado del proyecto web. Para personalizar el comportamiento de este proceso,
+edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 para obtener más información. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAATdZvu0X9FUCLk8BDIiNdwwAAAAACAAAAAAAQZgAAAAEAACAAAADb4+1aNy9A1uDdUoMpk3MKbVLQx4frGisBbSvoazvFLAAAAAAOgAAAAAIAACAAAACT8OZ7Sb3AFgPbdNqlBIW/UCspzmYp3FRO2To0vFft2SAAAAAN0xy1tteMmQAn8RrYQpgh5khVln2Bcqz5KLaZ7VkymkAAAAB1gilbpStZc0AKdVMiTm8snSPHltVFx4ShRMsYjwBEHEkfrrSxafNbE4z9RsiXtVy0s+VifucM7TnMuM4XTc3l</EncryptedPassword>
+    <_PublishTargetUrl>ftp://apimirror.somee.com/apimirror.somee.com</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>
