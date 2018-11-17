@@ -1,6 +1,8 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Newtonsoft.Json;
@@ -13,6 +15,9 @@ using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace ApiCalendarBackend.Controllers
 {
     public class TestController : ApiController
@@ -22,8 +27,8 @@ namespace ApiCalendarBackend.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ValuesController : ApiController
     {
-        static string[] Scopes = { CalendarService.Scope.CalendarReadonly };
-        static string ApplicationName = "Google Calendar API .NET Quickstart";
+        static string[] Scopes = { CalendarService.Scope.CalendarReadonly, GmailService.Scope.GmailReadonly };
+        static string ApplicationName = "Google Calendar amd Gmail API .NET Quickstart";
 
         string countdown(string fechaevento)
         {
@@ -76,7 +81,59 @@ namespace ApiCalendarBackend.Controllers
 
         }
 
+        List<Labels> obtenerCorreos()
+        {
+            List<Labels> correos = new List<Labels>();
+            UserCredential credential;
 
+            using (var stream =
+                new FileStream(HttpContext.Current.Server.MapPath("~/credentials2.json"), FileMode.Open, FileAccess.Read))
+            {
+                // The file token.json stores the user's access and refresh tokens, and is created
+                // automatically when the authorization flow completes for the first time.
+                string credPath = HttpContext.Current.Server.MapPath("~/token2.json");
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+                Console.WriteLine("Credential file saved to: " + credPath);
+            }
+
+            // Create Gmail API service.
+            var service = new GmailService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+            });
+
+            // Define parameters of request.
+            UsersResource.LabelsResource.ListRequest request = service.Users.Labels.List("me");
+
+            // List labels.
+            IList<Label> labels = request.Execute().Labels;
+            //Console.WriteLine("Labels:");
+            if (labels != null && labels.Count > 0)
+            {
+                foreach (var labelItem in labels)
+                {
+                    Labels correo = new Labels();
+                    correo.desc = labelItem.Name;
+                    correos.Add(correo);
+                    //correos.Add
+                 //   Console.WriteLine("{0}", labelItem.Name);
+                }
+            }
+            else
+            {
+                Labels correo = new Labels();
+                correo.desc = "no hay correos";
+                correos.Add(correo);
+                //   Console.WriteLine("No labels found.");
+            }
+            return correos;
+        }
 
         List<Event> megafunction()
         {
@@ -85,9 +142,9 @@ namespace ApiCalendarBackend.Controllers
 
             ci.DateTimeFormat.LongTimePattern = "hh':'mm";
 
-            Thread.CurrentThread.CurrentCulture = ci;
+            System.Threading.Thread.CurrentThread.CurrentCulture = ci;
 
-            Thread.CurrentThread.CurrentUICulture = ci;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
 
             
             List<Event> megaCadena = new List<Event>();
@@ -176,8 +233,14 @@ namespace ApiCalendarBackend.Controllers
             public String desc { get; set; }
             public String date { get; set; }
         }
+
+        public class Labels
+        {
+            public String desc { get; set; }
+        }
         public class RootObject
         {
+            public List<Labels> labels { get; set; }
             public List<Event> events { get; set; }
         }
         // GET api/values
@@ -186,10 +249,12 @@ namespace ApiCalendarBackend.Controllers
 
 
               RootObject obj = new RootObject();
-             List<Event> events = new List<Event>();
+            //  List<Event> events = new List<Event>();
+            // List<Labels> labels = new List<Labels>();
 
 
-             obj.events = megafunction();
+            obj.events = megafunction();
+            obj.labels = obtenerCorreos();
          //      String megaCadena = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
            //   RootObject objf = JsonConvert.DeserializeObject<RootObject>(megaCadena);
             
