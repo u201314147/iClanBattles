@@ -277,6 +277,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="token.json\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user" />
+    <Content Include="token2.json\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
