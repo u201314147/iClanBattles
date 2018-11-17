@@ -81,9 +81,9 @@ namespace ApiCalendarBackend.Controllers
 
         }
 
-        List<Labels> obtenerCorreos()
+        List<Threads> obtenerCorreos()
         {
-            List<Labels> correos = new List<Labels>();
+            List<Threads> correos = new List<Threads>();
             UserCredential credential;
 
             using (var stream =
@@ -108,18 +108,25 @@ namespace ApiCalendarBackend.Controllers
                 ApplicationName = ApplicationName,
             });
 
-            // Define parameters of request.
-            UsersResource.LabelsResource.ListRequest request = service.Users.Labels.List("me");
+            List<String> xd =new List<String>();
+            xd.Add("0");
+            xd.Add("1");
+            // Define parameters of request
+            UsersResource.ThreadsResource.ListRequest request = service.Users.Threads.List("me");
 
             // List labels.
-            IList<Label> labels = request.Execute().Labels;
+            var labels = request.Execute().Threads;
             //Console.WriteLine("Labels:");
             if (labels != null && labels.Count > 0)
             {
                 foreach (var labelItem in labels)
                 {
-                    Labels correo = new Labels();
-                    correo.desc = labelItem.Name;
+
+                    //labelItem.ToString();
+                    Threads correo = new Threads();
+                    correo.desc = labelItem.Snippet;
+                    
+                     
                     correos.Add(correo);
                     //correos.Add
                  //   Console.WriteLine("{0}", labelItem.Name);
@@ -127,7 +134,7 @@ namespace ApiCalendarBackend.Controllers
             }
             else
             {
-                Labels correo = new Labels();
+                Threads correo = new Threads();
                 correo.desc = "no hay correos";
                 correos.Add(correo);
                 //   Console.WriteLine("No labels found.");
@@ -234,13 +241,13 @@ namespace ApiCalendarBackend.Controllers
             public String date { get; set; }
         }
 
-        public class Labels
+        public class Threads
         {
             public String desc { get; set; }
         }
         public class RootObject
         {
-            public List<Labels> labels { get; set; }
+            public List<Threads> labels { get; set; }
             public List<Event> events { get; set; }
         }
         // GET api/values
