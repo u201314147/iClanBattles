@@ -30,11 +30,9 @@ namespace ApiCalendarBackend.Controllers
         static string[] Scopes = { CalendarService.Scope.CalendarReadonly, GmailService.Scope.GmailReadonly };
         static string ApplicationName = "Google Calendar amd Gmail API .NET Quickstart";
 
-        string countdown(string fechaevento)
+        string countdown(string string1, string string2)
         {
-
-
-         
+        
             var hoy = new DateTime();
             hoy = DateTime.Now;
 
@@ -42,42 +40,62 @@ namespace ApiCalendarBackend.Controllers
             double horas = 0;
             double minutos = 0;
             double segundos = 0;
-            
-            var date1 = new DateTime();
-            date1 = DateTime.ParseExact("2018-10-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff",
-                                       System.Globalization.CultureInfo.InvariantCulture);
-
-            double diferencia = (date1 - hoy).TotalDays / 1000;
-            dias = Math.Floor(diferencia / 86400);
-            diferencia = diferencia - (86400 * dias);
-            horas = Math.Floor(diferencia / 3600);
-            diferencia = diferencia - (3600 * horas);
-            minutos = Math.Floor(diferencia / 60);
-            diferencia = diferencia - (60 * minutos);
-            segundos = Math.Floor(diferencia);
-
-
-
-          //  console.log(hoy + "-" + fechaevento);
             var fechat = "";
+            DateTime date1 = new DateTime();
+            if(string1!="")
+            {
+                System.Diagnostics.Debug.WriteLine("DEBUGEO " + string1);
+                date1 = DateTime.ParseExact(string1, "yyyy-MM-dd HH:mm",
+                                  System.Globalization.CultureInfo.CurrentCulture);
+                fechat = string1;
+
+            }
+            if (string2 != "")
+            {
+                System.Diagnostics.Debug.WriteLine("DEBUGEO " + string2);
+                date1 = DateTime.ParseExact(string2, "yyyy-MM-dd",
+                                  System.Globalization.CultureInfo.CurrentCulture);
+
+                fechat = string2;
+
+            }
+
+
+
+          var diferencia = date1 - hoy;
+                dias = Math.Floor(diferencia.TotalDays);
+               horas = Math.Floor(diferencia.TotalHours);
+               minutos = (diferencia.Minutes);
+                 segundos = (diferencia.Seconds);
+
+
+            //  console.log(hoy + "-" + fechaevento);
+            //fechat = "";
+            if (segundos < 0)
+                fechat = "En estos momentos :";
+            if (minutos < 0)
+                fechat = "En estos momentos :";
+            if (horas < 0)
+            {
+                fechat = "En estos momentos :";
+            }
+         
 
 
             if (segundos > 0)
-                fechat = "Quedan " + segundos + " segundos :";
-            if (minutos > 0)
-                fechat = "Quedan " + minutos + " minutos :";
-            if (horas > 0)
-            {
-                if (date1.Hour > 12)
-                    fechat = "Hoy a las " + date1.Hour + " PM :";
-                else
-                    fechat = "Hoy a las " + date1.Hour + " AM :";
-            }
-            if (dias > 0)
+                    fechat = "En " + segundos + " segundos :";
+                if (minutos > 0)
+                    fechat = "En " + minutos + " minutos :";
+                if (horas > 0)
+                {
+                        fechat = "En " + horas + " horas :";
+                }
+                if (dias > 0)
                 fechat = "En " + dias + " Dias :";
+                
 
-            return fechat;
-
+                
+                return fechat;
 
         }
 
@@ -144,7 +162,7 @@ namespace ApiCalendarBackend.Controllers
 
         List<Event> megafunction()
         {
-            CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.Name);
+            CultureInfo ci = new CultureInfo("es-PE");
             ci.DateTimeFormat.ShortDatePattern = "yyyy'-'MM'-'dd";
 
             ci.DateTimeFormat.LongTimePattern = "hh':'mm";
@@ -152,7 +170,7 @@ namespace ApiCalendarBackend.Controllers
             System.Threading.Thread.CurrentThread.CurrentCulture = ci;
 
             System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
-
+            
             
             List<Event> megaCadena = new List<Event>();
             UserCredential credential;
@@ -202,12 +220,18 @@ namespace ApiCalendarBackend.Controllers
                     string s = dt.ToString();
 
                     string when = eventItem.Start.DateTime.ToString();
+                    
                     if (String.IsNullOrEmpty(when))
                     {
-                         when = eventItem.Start.Date;
-                      
+                        when = countdown("", eventItem.Start.Date);
 
                     }
+                    else
+                    {
+                        when = countdown(when, "");
+
+                    }
+
                     //        Console.WriteLine("{0} ({1})", eventItem.Summary, when);
                     Event even = new Event();
                     even.date = when;
