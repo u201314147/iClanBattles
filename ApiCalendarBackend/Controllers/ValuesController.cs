@@ -131,7 +131,7 @@ namespace ApiCalendarBackend.Controllers
             xd.Add("1");
             // Define parameters of request
             UsersResource.ThreadsResource.ListRequest request = service.Users.Threads.List("me");
-         
+            request.MaxResults = 5;
             // List labels.
             var labels = request.Execute().Threads;
           
@@ -148,29 +148,40 @@ namespace ApiCalendarBackend.Controllers
                   
                     correo.from = "";
                     correo.date = "";
-                    correos.Add(correo);
-                    if(labelItem.Messages!= null)
-                    { 
-                    foreach(var messages in labelItem.Messages)
+                    try
                     {
-                            correo.date = Convert.ToString(messages.InternalDate.Value);
-                            foreach (var headers in messages.Payload.Headers)
+                        var messagesx = service.Users.Messages.Get("me", labelItem.Id).Execute();
+
+                        if (messagesx != null)
                         {
-                                
+
+                            //correo.date = Convert.ToString(messagesx.InternalDate.Value);
+                            foreach (var headers in messagesx.Payload.Headers)
+                            {
+
                                 if (headers.Name == "Subject")
-                            {
-                           
-                                correo.subject = headers.Value;
+                                {
+
+                                    correo.subject = headers.Value;
+                                }
+                                if (headers.Name == "From")
+                                {
+
+                                    correo.from = headers.Value;
+                                }
+                                if (headers.Name == "Date")
+                                {
+                                    correo.date = headers.Value;
+                                }
+
                             }
-                            if (headers.Name == "From")
-                            {
-                           
-                                correo.from = headers.Value;
-                            }
-                             
-                            }
+
+                        }
+                    }catch(Exception e)
+                    {
+
                     }
-                    }
+                    correos.Add(correo);
                     //correos.Add
                     //   Console.WriteLine("{0}", labelItem.Name);
                 }
