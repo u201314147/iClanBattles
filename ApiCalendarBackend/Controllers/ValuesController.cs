@@ -79,7 +79,7 @@ namespace ApiCalendarBackend.Controllers
             {
                 fechat = "En estos momentos :";
             }
-         
+            
 
 
             if (segundos > 0)
@@ -103,7 +103,7 @@ namespace ApiCalendarBackend.Controllers
         {
             List<Threads> correos = new List<Threads>();
             UserCredential credential;
-
+            
             using (var stream =
                 new FileStream(HttpContext.Current.Server.MapPath("~/credentials2.json"), FileMode.Open, FileAccess.Read))
             {
@@ -131,9 +131,10 @@ namespace ApiCalendarBackend.Controllers
             xd.Add("1");
             // Define parameters of request
             UsersResource.ThreadsResource.ListRequest request = service.Users.Threads.List("me");
-
+         
             // List labels.
             var labels = request.Execute().Threads;
+          
             //Console.WriteLine("Labels:");
             if (labels != null && labels.Count > 0)
             {
@@ -143,11 +144,35 @@ namespace ApiCalendarBackend.Controllers
                     //labelItem.ToString();
                     Threads correo = new Threads();
                     correo.desc = labelItem.Snippet;
-                    
-                     
+                    correo.subject = "";
+                  
+                    correo.from = "";
+                    correo.date = "";
                     correos.Add(correo);
+                    if(labelItem.Messages!= null)
+                    { 
+                    foreach(var messages in labelItem.Messages)
+                    {
+                            correo.date = Convert.ToString(messages.InternalDate.Value);
+                            foreach (var headers in messages.Payload.Headers)
+                        {
+                                
+                                if (headers.Name == "Subject")
+                            {
+                           
+                                correo.subject = headers.Value;
+                            }
+                            if (headers.Name == "From")
+                            {
+                           
+                                correo.from = headers.Value;
+                            }
+                             
+                            }
+                    }
+                    }
                     //correos.Add
-                 //   Console.WriteLine("{0}", labelItem.Name);
+                    //   Console.WriteLine("{0}", labelItem.Name);
                 }
             }
             else
@@ -155,6 +180,7 @@ namespace ApiCalendarBackend.Controllers
                 Threads correo = new Threads();
                 correo.desc = "no hay correos";
                 correos.Add(correo);
+                
                 //   Console.WriteLine("No labels found.");
             }
             return correos;
@@ -235,6 +261,7 @@ namespace ApiCalendarBackend.Controllers
                     //        Console.WriteLine("{0} ({1})", eventItem.Summary, when);
                     Event even = new Event();
                     even.date = when;
+                  
                     even.desc = eventItem.Summary;
                     megaCadena.Add(even);
 
@@ -263,11 +290,16 @@ namespace ApiCalendarBackend.Controllers
         {
             public String desc { get; set; }
             public String date { get; set; }
+            
         }
 
         public class Threads
         {
             public String desc { get; set; }
+            public String subject { get; set; }
+            public String from { get; set; }
+            public String date { get; set; }
+
         }
         public class RootObject
         {
